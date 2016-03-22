@@ -1,0 +1,83 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Getting Started: Serving Web Content</title>
+    <link th:href="@{/webjars/bootstrap/3.3.6/css/bootstrap.min.css}" rel="stylesheet" media="screen" />
+    <link th:href="@{/css/sidemenu.css}" rel="stylesheet" />
+    <link th:href="@{/css/userprofile.css}" rel="stylesheet" />
+    <link th:href="@{/css/timeline.css}" rel="stylesheet" />
+    <link th:href="@{/css/style.css}" rel="stylesheet" />
+</head>
+<body>
+
+    <nav th:replace="fragments/header :: header"></nav>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-md-3">
+
+                <div class="userprofile-panel panel panel-default">
+                    <div class="panel-body">
+                        Waldemar Schlegel
+                    </div>
+                </div>
+
+                <div class="list-group">
+                    <a href="#" class="list-group-item">
+                        Globale Timeline
+                    </a>
+                    <a href="#" class="list-group-item">Persönliche Timeline</a>
+                </div>
+            </div>
+
+            <div class="col-md-8">
+
+                <div class="panel panel-default">
+                    <div class="panel-body">
+
+                        <h2 class="user-name">Waldemar Schlegel</h2>
+
+                        <div class="row">
+                            <div class="col-md-6 center-text-wrapper">
+                                <a class="center-text">Folge ich: 12</a>
+                            </div>
+                            <div class="col-md-6 center-text-wrapper">
+                                <a class="center-text">Folgen mir: 14</a>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+
+                <div class="panel panel-default">
+                    <div class="panel-body">
+
+                        <div>
+                            <h3>Folgen mir</h3>
+                        </div>
+
+                        <div class="user-search-results">
+                            <p class="user-name-link">
+                                Sergej Friedrich
+                            </p>
+                            <p class="user-name-link">
+                                Wladimir Putin
+                            </p>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <script th:src="@{/webjars/jquery/2.1.4/jquery.min.js}"></script>
+    <script th:src="@{/webjars/bootstrap/3.3.6/js/bootstrap.min.js}"></script>
+</body>
+</html>
