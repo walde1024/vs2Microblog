@@ -11,11 +11,13 @@ import org.springframework.web.bind.annotation.RequestParam;
  */
 @Controller
 public class HomeController {
-
-    @RequestMapping(path = "/", method = RequestMethod.GET)
-    public String greeting(@RequestParam(value="name", defaultValue="World", required = false) String name, Model model) {
-        model.addAttribute("name", name);
-
-        return "home";
-    }
+//		XXX im entwurf der seitennavigation existiert "home" nicht
+//		XXX habs in timelineController umbenannt sowie home.html in timeline.html
+	
+//    @RequestMapping(path = "/", method = RequestMethod.GET)
+//    public String greeting(@RequestParam(value="name", defaultValue="World", required = false) String name, Model model) {
+//        model.addAttribute("name", name);
+//
+//        return "home";
+//    }
 }
