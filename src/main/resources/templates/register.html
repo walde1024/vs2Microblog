@@ -18,22 +18,22 @@
         <div class="panel panel-default">
             <div class="panel-body">
 
-                <form class="form-register">
+                <form class="form-register" th:action="@{/register}" th:object="${registerForm}" method="post">
                     <h2 class="form-register-heading">Registrieren</h2>
                     <label for="inputFirstname" class="sr-only">Vorname</label>
-                    <input type="name" id="inputFirstname" class="form-control from-register-input" placeholder="Vorname" required="true" autofocus="true" />
+                    <input th:field="*{firstname}" id="inputFirstname" class="form-control from-register-input" placeholder="Vorname" required="true" autofocus="true" />
 
                     <label for="inputLastname" class="sr-only">Nachname</label>
-                    <input type="name" id="inputLastname" class="form-control from-register-input" placeholder="Nachname" required="true" autofocus="true" />
+                    <input id="inputLastname" th:field="*{lastname}" class="form-control from-register-input" placeholder="Nachname" required="true" />
 
                     <label for="inputEmail" class="sr-only">Email address</label>
-                    <input type="email" id="inputEmail" class="form-control from-register-input" placeholder="Email Adresse" required="true" />
+                    <input type="email" id="inputEmail" th:field="*{email}" class="form-control from-register-input" placeholder="Email Adresse" required="true" />
 
                     <label for="inputPassword" class="sr-only">Password</label>
-                    <input type="password" id="inputPassword" class="form-control registerInputPassword" placeholder="Passwort" required="true"/>
+                    <input type="password" id="inputPassword" th:field="*{password}" class="form-control registerInputPassword" placeholder="Passwort" required="true"/>
 
                     <label for="inputPasswordRepeat" class="sr-only">Password</label>
-                    <input type="password" id="inputPasswordRepeat" class="form-control from-register-input" placeholder="Passwort wiederholen" required="true"/>
+                    <input type="password" id="inputPasswordRepeat" th:field="*{passwordRepeat}" class="form-control from-register-input" placeholder="Passwort wiederholen" required="true"/>
 
                     <button class="btn btn-lg btn-primary btn-block" type="submit">Registrieren</button>
                 </form>
