@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import javax.servlet.http.HttpSession;
 import java.util.Iterator;
 import java.util.Set;
 
@@ -34,15 +35,17 @@ public class RegisterController {
     }
 
     @RequestMapping(path = "/register", method = RequestMethod.POST)
-    public String postRegister(@ModelAttribute RegisterForm registerForm, Model model) {
+    public String postRegister(HttpSession session, @ModelAttribute RegisterForm registerForm, Model model) {
         //TODO: Create validate method in registerForm
-
+        //TODO: Check if user already exists
         userDao.storeUser(
                 registerForm.getFirstname(),
                 registerForm.getLastname(),
                 registerForm.getEmail(),
                 registerForm.getPassword()
         );
+
+        session.setAttribute("email", registerForm.getEmail());
 
         return "redirect:/";
     }

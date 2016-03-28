@@ -62,5 +62,6 @@
     <orderEntry type="library" name="Maven: org.webjars:bootstrap:3.3.6" level="project" />
     <orderEntry type="library" name="Maven: org.webjars:jquery:2.1.4" level="project" />
     <orderEntry type="library" name="Maven: com.google.code.gson:gson:2.6.2" level="project" />
+    <orderEntry type="library" name="Maven: org.springframework.session:spring-session:1.0.0.RELEASE" level="project" />
   </component>
 </module>
