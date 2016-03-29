@@ -26,7 +26,7 @@
                     <input th:field="*{password}" type="password" id="inputPassword" class="form-control" placeholder="Passwort" />
                     <div class="checkbox">
                         <label>
-                            <input type="checkbox" value="remember-me" checked="true" /> Angemeldet bleiben
+                            <input th:field="*{rememberMe}" type="checkbox" value="remember-me" checked="true" /> Angemeldet bleiben
                         </label>
                     </div>
                     <button class="btn btn-lg btn-primary btn-block" type="submit">Login</button>

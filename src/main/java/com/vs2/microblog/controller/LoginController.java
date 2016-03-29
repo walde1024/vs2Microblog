@@ -19,6 +19,9 @@ import javax.servlet.http.HttpSession;
 @Controller
 public class LoginController {
 
+    private static final int SESSION_EXPIRATION_NOT_REMEMBER = 60*5;
+    private static final int SESSION_EXPIRATION_REMEMBER = 60*60*24*30;
+
     @Autowired
     private UserDao userDao;
 
@@ -40,7 +43,13 @@ public class LoginController {
 
         session.setAttribute("email", user.getEmail());
 
+        if (!loginForm.isRememberMe()) {
+            session.setMaxInactiveInterval(SESSION_EXPIRATION_NOT_REMEMBER);
+        }
+        else {
+            session.setMaxInactiveInterval(SESSION_EXPIRATION_REMEMBER);
+        }
+
         return "redirect:/";
     }
-
 }

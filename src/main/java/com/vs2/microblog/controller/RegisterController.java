@@ -38,6 +38,7 @@ public class RegisterController {
     public String postRegister(HttpSession session, @ModelAttribute RegisterForm registerForm, Model model) {
         //TODO: Create validate method in registerForm
         //TODO: Check if user already exists
+        //TODO: Hash Password
         userDao.storeUser(
                 registerForm.getFirstname(),
                 registerForm.getLastname(),
