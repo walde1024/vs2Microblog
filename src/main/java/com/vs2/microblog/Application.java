@@ -1,5 +1,7 @@
 package com.vs2.microblog;
 
+import com.vs2.microblog.controller.session.SessionManager;
+import com.vs2.microblog.controller.utils.UserUtils;
 import com.vs2.microblog.dao.UserDaoRedis;
 import com.vs2.microblog.dao.api.UserDao;
 import com.vs2.microblog.entity.User;
@@ -84,5 +86,13 @@ public class Application {
         return new UserDaoRedis();
     }
 
+    @Bean
+    public SessionManager sessionManager() {
+        return new SessionManager();
+    }
 
+    @Bean
+    public UserUtils userUtils() {
+        return new UserUtils();
+    }
 }

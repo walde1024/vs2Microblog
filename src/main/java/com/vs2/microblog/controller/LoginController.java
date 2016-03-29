@@ -36,6 +36,7 @@ public class LoginController {
     public String postLogin(@ModelAttribute LoginForm loginForm, Model model, HttpSession session) {
         User user = userDao.getUserByEmail(loginForm.getEmail());
 
+        //TODO: Show error in view
         if (user == null || !user.getPassword().equals(loginForm.getPassword())) {
             model.addAttribute("error", "Benutzername oder Passwort ist falsch.");
             return "login";

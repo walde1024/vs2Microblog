@@ -1,0 +1,26 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+</head>
+<body>
+
+<div class="col-md-3" th:fragment="sidemenu" th:object="${user}">
+
+    <div class="userprofile-panel panel panel-default">
+        <div class="panel-body">
+            <a th:text="*{firstname} + ' ' + *{lastname}"></a>
+        </div>
+    </div>
+
+    <div class="list-group">
+        <a href="/?timeline=global" class="list-group-item" th:classappend="${timeline} == 'global' ? active : not-active">
+            Globale Timeline
+        </a>
+        <a href="/?timeline=personal" class="list-group-item" th:classappend="${timeline} == 'personal' ? active : not-active">
+            Persönliche Timeline
+        </a>
+    </div>
+</div>
+
+</body>
+</html>
