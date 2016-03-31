@@ -33,4 +33,12 @@ public class TimelineController {
 
 		return "timeline";
 	}
+
+	@RequestMapping(path = "/", method = RequestMethod.POST)
+	public String createMessage(@RequestParam(name = "timeline", defaultValue = GLOBAL_TIMELINE) String timeline,HttpSession session, Model model) {
+		model.addAttribute("user", userUtils.getUserFromSession(session));
+		model.addAttribute("timeline", timeline);
+		
+		return "timeline";
+	}
 }

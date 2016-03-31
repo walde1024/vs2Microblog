@@ -4,12 +4,14 @@ import com.vs2.microblog.controller.session.SessionManager;
 import com.vs2.microblog.dao.api.UserDao;
 import com.vs2.microblog.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpSession;
 
 /**
  * Created by Walde on 29.03.16.
  */
+@Component
 public class UserUtils {
 
     @Autowired

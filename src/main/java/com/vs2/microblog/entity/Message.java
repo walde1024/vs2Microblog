@@ -6,12 +6,12 @@ package com.vs2.microblog.entity;
 public class Message {
 
     private long messageId;
-    private long userId;
+    private String userEmail;
     private String body;
     private long dateTime;
 
-    public Message(long userId, String body, long dateTime) {
-        this.userId = userId;
+    public Message(String userEmail, String body, long dateTime) {
+        this.userEmail = userEmail;
         this.body = body;
         this.dateTime = dateTime;
     }
@@ -24,12 +24,12 @@ public class Message {
         this.messageId = messageId;
     }
 
-    public long getUserId() {
-        return userId;
+    public String getUserEmail() {
+        return userEmail;
     }
 
-    public void setUserId(long userId) {
-        this.userId = userId;
+    public void setUserEmail(String userEmail) {
+        this.userEmail = userEmail;
     }
 
     public String getBody() {
