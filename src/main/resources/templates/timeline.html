@@ -24,8 +24,10 @@
 
                 <div class="panel panel-default message-panel">
                     <div class="panel-body">
-                        <textarea class="new-message form-control" rows="4" placeholder="Was gibt's neues?"></textarea>
-                        <button class="btn btn-primary pull-right">Posten</button>
+                        <form class="form-register" th:object="${postForm}" method="post">
+                            <textarea th:field="*{body}" class="new-message form-control" rows="4" placeholder="Was gibt's neues?" required="true"></textarea>
+                            <button class="btn btn-primary pull-right" type="submit">Posten</button>
+                        </form>
                     </div>
                 </div>
 

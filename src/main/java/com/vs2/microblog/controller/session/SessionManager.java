@@ -24,4 +24,13 @@ public class SessionManager {
     public void logout(HttpSession session) {
         session.removeAttribute(EMAIL_KEY);
     }
+
+    /**
+     * Sets email in session.
+     * @param email
+     * @param session
+     */
+    public void setEmailInSession(String email, HttpSession session) {
+        session.setAttribute("email", email);
+    }
 }

@@ -5,6 +5,11 @@ import com.vs2.microblog.dao.api.UserDao;
 import com.vs2.microblog.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.ScanOptions;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
 
 
 /**
@@ -13,6 +18,8 @@ import org.springframework.data.redis.core.RedisTemplate;
 public class UserDaoRedis implements UserDao {
 
     private static final String USERS_NAMESPACE = "user:";
+    private static final String FOLLOW_ME_PREFIX = "followme:";
+    private static final String I_FOLLOW_PREFIX = "ifollow:";
 
     @Autowired
     private RedisTemplate<String, String> template;
@@ -27,7 +34,6 @@ public class UserDaoRedis implements UserDao {
      */
     @Override
     public User storeUser(final String firstname, final String lastname, final String email, final String password) {
-        Gson gson = new Gson();
         User user = new User(
                 firstname,
                 lastname,
@@ -35,7 +41,7 @@ public class UserDaoRedis implements UserDao {
                 password
         );
 
-        String jsonUser = gson.toJson(user);
+        String jsonUser = user.toJson();
 
         template.opsForValue().set(USERS_NAMESPACE + user.getEmail(), jsonUser);
 
@@ -49,13 +55,29 @@ public class UserDaoRedis implements UserDao {
      */
     @Override
     public User getUserByEmail(final String email) {
-        Gson gson = new Gson();
         String jsonUser = template.opsForValue().get(USERS_NAMESPACE + email);
 
         if (jsonUser == null) {
             return null;
         }
 
-        return gson.fromJson(jsonUser, User.class);
+        return User.fromJson(jsonUser);
+    }
+
+    @Override
+    public List<User> getUsersFollowingMe(User me) {
+        return getUsersFollowingMe(me.getEmail());
+    }
+
+    @Override
+    public List<User> getUsersFollowingMe(String myEmail) {
+        Set<String> usersFollowingMeJson = template.opsForSet().members(FOLLOW_ME_PREFIX + myEmail);
+        List<User> usersFollowingMe = new ArrayList<>();
+
+        for(String jsonUser: usersFollowingMeJson) {
+            usersFollowingMe.add(User.fromJson(jsonUser));
+        }
+
+        return usersFollowingMe;
     }
 }

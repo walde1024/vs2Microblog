@@ -2,7 +2,9 @@ package com.vs2.microblog;
 
 import com.vs2.microblog.controller.session.SessionManager;
 import com.vs2.microblog.controller.utils.UserUtils;
+import com.vs2.microblog.dao.MessageDaoRedis;
 import com.vs2.microblog.dao.UserDaoRedis;
+import com.vs2.microblog.dao.api.MessageDao;
 import com.vs2.microblog.dao.api.UserDao;
 import com.vs2.microblog.entity.User;
 import com.vs2.microblog.security.SecurityExcludeConfiguration;
@@ -84,6 +86,11 @@ public class Application {
     @Bean
     public UserDao userDaoRedis() {
         return new UserDaoRedis();
+    }
+
+    @Bean
+    public MessageDao messageDaoRedis() {
+        return new MessageDaoRedis();
     }
 
     @Bean

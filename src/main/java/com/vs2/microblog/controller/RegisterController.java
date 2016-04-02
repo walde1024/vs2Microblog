@@ -2,6 +2,7 @@ package com.vs2.microblog.controller;
 
 import com.google.gson.Gson;
 import com.vs2.microblog.controller.form.RegisterForm;
+import com.vs2.microblog.controller.session.SessionManager;
 import com.vs2.microblog.dao.api.UserDao;
 import com.vs2.microblog.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +28,9 @@ public class RegisterController {
     @Autowired
     UserDao userDao;
 
+    @Autowired
+    SessionManager sessionManager;
+
     @RequestMapping(path = "/register", method = RequestMethod.GET)
     public String getRegister(Model model) {
         model.addAttribute("registerForm", new RegisterForm());
@@ -46,7 +50,7 @@ public class RegisterController {
                 registerForm.getPassword()
         );
 
-        session.setAttribute("email", registerForm.getEmail());
+        sessionManager.setEmailInSession(registerForm.getEmail(), session);
 
         return "redirect:/";
     }
