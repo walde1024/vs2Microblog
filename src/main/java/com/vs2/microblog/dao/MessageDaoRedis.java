@@ -15,7 +15,7 @@ import java.util.List;
 public class MessageDaoRedis implements MessageDao {
 
     private static final String MESSAGE_KEY_PREFIX = "message:";
-    private static final String USERS_MESSAGES_LIST_PREFIX = "usermessages:";
+    private static final String USERS_MESSAGES_SET_PREFIX = "usermessages:";
     private static final String MESSAGE_SEQUENCE = "messagekey";
     private static final String GLOBAL_TIMELINE_KEY = "globaltimeline";
     private static final String PERSONAL_TIMELINE_PREFIX = "personaltimeline:";
@@ -28,13 +28,13 @@ public class MessageDaoRedis implements MessageDao {
 
     /**
      * Stores the message on the db.
-     * @param user
+     * @param authorEmail
      * @param text
      * @return The stored message.
      */
     @Override
-    public Message storeMessage(User user, String text) {
-        Message message = new Message(generateMessageKey(), user.getEmail(), text, System.currentTimeMillis());
+    public Message storeMessage(String authorEmail, String text) {
+        Message message = new Message(generateMessageKey(), authorEmail, text, System.currentTimeMillis());
 
         saveMessageToRedis(message);
         addMessageReferenceToUsersMessages(message);
@@ -62,8 +62,8 @@ public class MessageDaoRedis implements MessageDao {
      * @param message
      */
     private void addMessageReferenceToUsersMessages(Message message) {
-        template.opsForList().leftPush(USERS_MESSAGES_LIST_PREFIX + message.getUserEmail(),
-                String.valueOf(message.getMessageId()));
+        template.opsForZSet().add(USERS_MESSAGES_SET_PREFIX + message.getUserEmail(),
+                String.valueOf(message.getMessageId()), message.getDateTime());
     }
 
     /**

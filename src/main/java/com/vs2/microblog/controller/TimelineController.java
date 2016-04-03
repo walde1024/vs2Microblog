@@ -53,7 +53,7 @@ public class TimelineController {
 		model.addAttribute(User.MODEL_KEY, user);
 		model.addAttribute(TIMELINE_KEY, timeline);
 
-		messageDao.storeMessage(user, postForm.getBody());
+		messageDao.storeMessage(user.getEmail(), postForm.getBody());
 
 		return "timeline";
 	}

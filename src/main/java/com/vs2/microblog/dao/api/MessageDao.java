@@ -7,5 +7,5 @@ import com.vs2.microblog.entity.User;
  * Created by Walde on 29.03.16.
  */
 public interface MessageDao {
-    Message storeMessage(User user, String text);
+    Message storeMessage(String authorEmail, String message);
 }
