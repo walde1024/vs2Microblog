@@ -8,4 +8,7 @@ import com.vs2.microblog.entity.User;
  */
 public interface MessageDao {
     Message storeMessage(String authorEmail, String message);
+
+    String getGlobalTimelineMessages(int fromMessage, int toMessage);
+    String getPersonalTimelineMessages(int fromMessage, int toMessage, String email);
 }

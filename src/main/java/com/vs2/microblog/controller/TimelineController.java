@@ -10,10 +10,7 @@ import com.vs2.microblog.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
 
@@ -52,9 +49,25 @@ public class TimelineController {
 		User user = userUtils.getUserFromSession(session);
 		model.addAttribute(User.MODEL_KEY, user);
 		model.addAttribute(TIMELINE_KEY, timeline);
+		model.addAttribute("postForm", new PostForm());
 
 		messageDao.storeMessage(user.getEmail(), postForm.getBody());
 
 		return "timeline";
+	}
+
+	@RequestMapping(path = "/messages", method = RequestMethod.GET, produces = { "application/json; charset=utf-8" })
+	public @ResponseBody String getMessages(@RequestParam(name = "timeline") String timeline,
+							  @RequestParam(name = "fromMessage") String fromMessage,
+							  @RequestParam(name = "toMessage") String toMessage,
+							  HttpSession session) {
+
+		if (timeline.equals(GLOBAL_TIMELINE)) {
+			return messageDao.getGlobalTimelineMessages(Integer.parseInt(fromMessage), Integer.parseInt(toMessage));
+		}
+		else {
+			User me = userUtils.getUserFromSession(session);
+			return messageDao.getPersonalTimelineMessages(Integer.parseInt(fromMessage), Integer.parseInt(toMessage), me.getEmail());
+		}
 	}
 }

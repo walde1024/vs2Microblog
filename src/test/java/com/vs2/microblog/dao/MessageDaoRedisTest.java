@@ -104,6 +104,22 @@ public class MessageDaoRedisTest {
             assertEquals(msgIFollow.getMessageId(), Long.parseLong(v));
         });
     }
+
+    @Test
+    public void testGetGlobalTimelineMessages() throws Exception {
+        messageDao.storeMessage(myEmail, "hallo123");
+        String messagesJson = messageDao.getGlobalTimelineMessages(0, 0);
+
+        assertTrue(messagesJson.contains("hallo123"));
+    }
+
+    @Test
+    public void testGetPersonalTimelineMessages() throws Exception {
+        messageDao.storeMessage(myEmail, "hallo123");
+        String messagesJson = messageDao.getPersonalTimelineMessages(0, 0, myEmail);
+
+        assertTrue(messagesJson.contains("hallo123"));
+    }
 }
 
 

@@ -1,5 +1,6 @@
 package com.vs2.microblog.dao;
 
+import com.google.gson.Gson;
 import com.vs2.microblog.dao.api.MessageDao;
 import com.vs2.microblog.dao.api.UserDao;
 import com.vs2.microblog.entity.Message;
@@ -7,7 +8,9 @@ import com.vs2.microblog.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by Walde on 29.03.16.
@@ -44,6 +47,36 @@ public class MessageDaoRedis implements MessageDao {
         addMessageReferenceToPersonalTimelineOfFollowers(message);
 
         return message;
+    }
+
+    @Override
+    public String getGlobalTimelineMessages(int fromMessage, int toMessage) {
+        Set<String> messageIds = template.opsForZSet().reverseRange(GLOBAL_TIMELINE_KEY, fromMessage, toMessage);
+        List<Message> messages = new ArrayList<>();
+
+        for (String msgId: messageIds) {
+            messages.add(this.getMessageById(msgId));
+        }
+
+        Gson gson = new Gson();
+        return gson.toJson(messages);
+    }
+
+    private Message getMessageById(String msgId) {
+        return Message.fromJson(template.opsForValue().get(MESSAGE_KEY_PREFIX + msgId));
+    }
+
+    @Override
+    public String getPersonalTimelineMessages(int fromMessage, int toMessage, String email) {
+        Set<String> messageIds = template.opsForZSet().reverseRange(PERSONAL_TIMELINE_PREFIX + email, fromMessage, toMessage);
+        List<Message> messages = new ArrayList<>();
+
+        for (String msgId: messageIds) {
+            messages.add(this.getMessageById(msgId));
+        }
+
+        Gson gson = new Gson();
+        return gson.toJson(messages);
     }
 
     /**
