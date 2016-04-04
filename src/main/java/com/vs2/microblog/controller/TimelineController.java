@@ -7,6 +7,7 @@ import com.vs2.microblog.controller.utils.UserUtils;
 import com.vs2.microblog.dao.api.MessageDao;
 import com.vs2.microblog.dao.api.UserDao;
 import com.vs2.microblog.entity.User;
+import com.vs2.microblog.view.provider.TimelineViewProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -31,6 +32,9 @@ public class TimelineController {
 
 	@Autowired
 	MessageDao messageDao;
+
+	@Autowired
+	TimelineViewProvider timelineViewProvider;
 
 	@RequestMapping(path = "/", method = RequestMethod.GET)
 	public String show(@RequestParam(name = "timeline", defaultValue = GLOBAL_TIMELINE) String timeline,HttpSession session, Model model) {
@@ -63,11 +67,11 @@ public class TimelineController {
 							  HttpSession session) {
 
 		if (timeline.equals(GLOBAL_TIMELINE)) {
-			return messageDao.getGlobalTimelineMessages(Integer.parseInt(fromMessage), Integer.parseInt(toMessage));
+			return timelineViewProvider.getGlobalTimelineViews(Integer.parseInt(fromMessage), Integer.parseInt(toMessage));
 		}
 		else {
 			User me = userUtils.getUserFromSession(session);
-			return messageDao.getPersonalTimelineMessages(Integer.parseInt(fromMessage), Integer.parseInt(toMessage), me.getEmail());
+			return timelineViewProvider.getPersonalTimelineViews(Integer.parseInt(fromMessage), Integer.parseInt(toMessage), me.getEmail());
 		}
 	}
 }

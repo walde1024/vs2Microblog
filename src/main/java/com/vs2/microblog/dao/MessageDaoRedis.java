@@ -50,7 +50,7 @@ public class MessageDaoRedis implements MessageDao {
     }
 
     @Override
-    public String getGlobalTimelineMessages(int fromMessage, int toMessage) {
+    public List<Message> getGlobalTimelineMessages(int fromMessage, int toMessage) {
         Set<String> messageIds = template.opsForZSet().reverseRange(GLOBAL_TIMELINE_KEY, fromMessage, toMessage);
         List<Message> messages = new ArrayList<>();
 
@@ -58,8 +58,7 @@ public class MessageDaoRedis implements MessageDao {
             messages.add(this.getMessageById(msgId));
         }
 
-        Gson gson = new Gson();
-        return gson.toJson(messages);
+        return messages;
     }
 
     private Message getMessageById(String msgId) {
@@ -67,7 +66,7 @@ public class MessageDaoRedis implements MessageDao {
     }
 
     @Override
-    public String getPersonalTimelineMessages(int fromMessage, int toMessage, String email) {
+    public List<Message> getPersonalTimelineMessages(int fromMessage, int toMessage, String email) {
         Set<String> messageIds = template.opsForZSet().reverseRange(PERSONAL_TIMELINE_PREFIX + email, fromMessage, toMessage);
         List<Message> messages = new ArrayList<>();
 
@@ -75,8 +74,7 @@ public class MessageDaoRedis implements MessageDao {
             messages.add(this.getMessageById(msgId));
         }
 
-        Gson gson = new Gson();
-        return gson.toJson(messages);
+        return messages;
     }
 
     /**

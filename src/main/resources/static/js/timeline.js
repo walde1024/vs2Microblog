@@ -1,25 +1,72 @@
 var TimelineController = {
     readFirstMessages: function() {
         var that = this;
+        var timeline = this.getUrlParameter("timeline");
+        timeline = (timeline) ? timeline : "global";
 
         $.ajax({
           url: "/messages",
-          data: {"timeline": "global", "fromMessage": "0", "toMessage": "14"},
-          success: that.onReadFirstMessagesSuccess,
-          error: that.onReadFirstMessagesError,
+          data: {"timeline": timeline, "fromMessage": "0", "toMessage": "14"},
+          success: jQuery.proxy(function(data) {that.showMessagesOnPage(data)}, that),
+          error: that.onReadMessagesError,
         });
     },
 
-    onReadFirstMessagesSuccess: function(data) {
-        console.log(data);
+    showMessagesOnPage: function(data) {
         for (var i = 0; i < data.length; i++) {
-            $('#message-container').append("<p>" + data[i].body + "</p>")
+
+            var messageHtml =
+            '<div class="panel panel-default message-panel">' +
+                '<div class="panel-body">' +
+                    '<div>' +
+                        '<p class="message-author">' +
+                            data[i].author +
+                        '</p>' +
+                        '<p class="message-time">' +
+                            this.formatDate(data[i].dateTime) +
+                        '</p>' +
+                        '<p class="message-body">' +
+                            data[i].body +
+                        '</p>' +
+                    '</div>' +
+                '</div>' +
+            '</div>'
+
+            $('#message-container').append(messageHtml);
         }
     },
 
-    onReadFirstMessagesError: function(e) {
+    onReadMessagesError: function(e) {
         console.log(e);
-    }
+    },
+
+    formatDate: function(millis) {
+
+        var date = new Date(millis);
+
+        var yyyy = date.getFullYear().toString();
+        var mm = (date.getMonth()+1).toString(); // getMonth() is zero-based
+        var dd  = date.getDate().toString();
+        var hh = date.getHours().toString();
+        var min = date.getMinutes().toString();
+
+        return (dd[1]?dd:"0"+dd[0]) + '.' + (mm[1]?mm:"0"+mm[0]) + '.' + yyyy + ' ' + (hh[1]?hh:"0"+hh[0]) + ':' + (min[1]?min:"0"+min[0]); // padding
+    },
+
+    getUrlParameter: function(sParam) {
+        var sPageURL = decodeURIComponent(window.location.search.substring(1)),
+        sURLVariables = sPageURL.split('&'),
+        sParameterName,
+        i;
+
+        for (i = 0; i < sURLVariables.length; i++) {
+            sParameterName = sURLVariables[i].split('=');
+
+            if (sParameterName[0] === sParam) {
+                return sParameterName[1] === undefined ? true : sParameterName[1];
+            }
+        }
+    },
 }
 
 TimelineController.readFirstMessages();

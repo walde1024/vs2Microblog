@@ -13,6 +13,7 @@ import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import java.util.List;
 import java.util.Set;
 
 import static org.junit.Assert.*;
@@ -34,6 +35,7 @@ public class MessageDaoRedisTest {
     private final String myFollower1 = "myFollower1@test.com";
     private final String myFollower2 = "myFollower2@test.com";
     private final String iFollow1 = "ifollow1@test.com";
+    private final String otherEmail = "n123@test.com";
 
     @Autowired
     private UserDao userDao;
@@ -108,17 +110,22 @@ public class MessageDaoRedisTest {
     @Test
     public void testGetGlobalTimelineMessages() throws Exception {
         messageDao.storeMessage(myEmail, "hallo123");
-        String messagesJson = messageDao.getGlobalTimelineMessages(0, 0);
+        messageDao.storeMessage(otherEmail, "test123");
+        List<Message> messages = messageDao.getGlobalTimelineMessages(0, -1);
 
-        assertTrue(messagesJson.contains("hallo123"));
+        assertEquals(2, messages.size());
+        assertTrue(messages.get(0).getBody().equals("test123"));
+        assertTrue(messages.get(1).getBody().equals("hallo123"));
     }
 
     @Test
     public void testGetPersonalTimelineMessages() throws Exception {
         messageDao.storeMessage(myEmail, "hallo123");
-        String messagesJson = messageDao.getPersonalTimelineMessages(0, 0, myEmail);
+        messageDao.storeMessage(otherEmail, "test123");
+        List<Message> messages = messageDao.getPersonalTimelineMessages(0, -1, myEmail);
 
-        assertTrue(messagesJson.contains("hallo123"));
+        assertEquals(1, messages.size());
+        assertTrue(messages.get(0).getBody().equals("hallo123"));
     }
 }
 

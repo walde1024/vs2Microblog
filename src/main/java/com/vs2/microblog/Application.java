@@ -8,6 +8,8 @@ import com.vs2.microblog.dao.api.MessageDao;
 import com.vs2.microblog.dao.api.UserDao;
 import com.vs2.microblog.entity.User;
 import com.vs2.microblog.security.SecurityExcludeConfiguration;
+import com.vs2.microblog.view.TimelineView;
+import com.vs2.microblog.view.provider.TimelineViewProvider;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.embedded.FilterRegistrationBean;
@@ -91,6 +93,11 @@ public class Application {
     @Bean
     public MessageDao messageDaoRedis() {
         return new MessageDaoRedis();
+    }
+
+    @Bean
+    public TimelineViewProvider timelineViewProvider() {
+        return new TimelineViewProvider();
     }
 
     @Bean
