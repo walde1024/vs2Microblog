@@ -17,6 +17,10 @@ public interface UserDao {
 
     List<User> getUsersIFollow(String myEmail);
 
+    long getUsersFollowingUserCount(String userEmail);
+
+    long getUsersUserFollowsCount(String userEmail);
+
     void addIFollowUser(String myEmail, String iFollowUserEmail);
 
     void deleteUser(String email);

@@ -86,6 +86,16 @@ public class UserDaoRedis implements UserDao {
     }
 
     @Override
+    public long getUsersFollowingUserCount(String userEmail) {
+        return template.opsForList().size(FOLLOW_ME_PREFIX + userEmail);
+    }
+
+    @Override
+    public long getUsersUserFollowsCount(String userEmail) {
+        return template.opsForList().size(I_FOLLOW_PREFIX + userEmail);
+    }
+
+    @Override
     public void addIFollowUser(String myEmail, String iFollowUserEmail) {
         template.opsForList().leftPush(I_FOLLOW_PREFIX + myEmail, iFollowUserEmail);
         template.opsForList().leftPush(FOLLOW_ME_PREFIX + iFollowUserEmail, myEmail);

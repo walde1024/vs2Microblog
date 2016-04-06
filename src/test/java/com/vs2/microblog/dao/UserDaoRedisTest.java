@@ -113,4 +113,30 @@ public class UserDaoRedisTest {
         myFollowers = userDao.getUsersFollowingMe(myEmail);
         assertTrue(myFollowers.size() == 0);
     }
+
+    @Test
+    public void testGetUsersFollowingUserCount() throws Exception {
+        String myEmail = "barack.obama@test.com";
+        String follower1Email = "barack.obama.follower1@test.com";
+        String follower2Email = "barack.obama.follower2@test.com";
+
+        userDao.addIFollowUser(follower1Email, myEmail);
+        userDao.addIFollowUser(follower2Email, myEmail);
+
+        assertEquals(2, userDao.getUsersFollowingUserCount(myEmail));
+    }
+
+    @Test
+    public void testGetUsersUserFollowsCount() throws Exception {
+        String myEmail = "barack.obama@test.com";
+        String iFollow1Email = "barack.obama.follower1@test.com";
+        String iFollow2Email = "barack.obama.follower2@test.com";
+        String iFollow3Email = "barack.obama.follower3@test.com";
+
+        userDao.addIFollowUser(myEmail, iFollow1Email);
+        userDao.addIFollowUser(myEmail, iFollow2Email);
+        userDao.addIFollowUser(myEmail, iFollow3Email);
+
+        assertEquals(3, userDao.getUsersUserFollowsCount(myEmail));
+    }
 }

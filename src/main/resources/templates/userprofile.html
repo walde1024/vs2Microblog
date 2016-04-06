@@ -23,12 +23,12 @@
 
             <div class="col-md-8">
 
-                <div class="panel panel-default">
+                <div class="panel panel-default" th:object="${userProfile}">
                     <div class="panel-body">
 
                         <div class="row">
                             <div class="col-md-6">
-                                <h2 class="user-name">Waldemar Schlegel</h2>
+                                <h2 class="user-name" th:text="*{firstname} + ' ' + *{lastname}"></h2>
                             </div>
 
                             <div class="col-md-6">
@@ -38,10 +38,10 @@
 
                         <div class="row">
                             <div class="col-md-6 center-text-wrapper">
-                                <a class="center-text">Folge ich: 12</a>
+                                <a class="center-text">Folge ich: <span th:text="*{iFollowCount}"></span></a>
                             </div>
                             <div class="col-md-6 center-text-wrapper">
-                                <a class="center-text">Folgen mir: 14</a>
+                                <a class="center-text">Folgen mir: <span th:text="*{followMeCount}"></span></a>
                             </div>
                         </div>
 

@@ -10,6 +10,7 @@ import com.vs2.microblog.entity.User;
 import com.vs2.microblog.security.SecurityExcludeConfiguration;
 import com.vs2.microblog.view.TimelineView;
 import com.vs2.microblog.view.provider.TimelineViewProvider;
+import com.vs2.microblog.view.provider.UserProfileViewProvider;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.embedded.FilterRegistrationBean;
@@ -98,6 +99,11 @@ public class Application {
     @Bean
     public TimelineViewProvider timelineViewProvider() {
         return new TimelineViewProvider();
+    }
+
+    @Bean
+    public UserProfileViewProvider userProfileViewProvider() {
+        return new UserProfileViewProvider();
     }
 
     @Bean
