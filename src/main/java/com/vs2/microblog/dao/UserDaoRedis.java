@@ -17,6 +17,7 @@ public class UserDaoRedis implements UserDao {
     private static final String USER_PREFIX = "user:";
     private static final String FOLLOW_ME_PREFIX = "followme:";
     private static final String I_FOLLOW_PREFIX = "ifollow:";
+    private static final String I_FOLLOW_INDEX_PREFIX = "ifollowindex:";
 
     @Autowired
     private RedisTemplate<String, String> template;
@@ -83,6 +84,19 @@ public class UserDaoRedis implements UserDao {
         }
 
         return usersIFollow;
+    }
+
+    @Override
+    public boolean doIFollowUser(String myEmail, String userEmail) {
+        User userIMaybeFollow = this.getUserByEmail(userEmail);
+        List<User> users = this.getUsersIFollow(myEmail);
+        for (User u: users) {
+            if (u.equals(userIMaybeFollow)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     @Override

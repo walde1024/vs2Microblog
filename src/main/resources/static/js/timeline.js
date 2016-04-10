@@ -20,7 +20,7 @@ var TimelineController = {
                 '<div class="panel-body">' +
                     '<div>' +
                         '<p class="message-author">' +
-                            data[i].author +
+                            '<a href="/userprofile?userEmail=' + data[i].authorEmail + '">' + data[i].author + '</a>' +
                         '</p>' +
                         '<p class="message-time">' +
                             this.formatDate(data[i].dateTime) +

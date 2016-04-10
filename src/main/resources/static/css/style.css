@@ -16,3 +16,11 @@ body {
 .center-text {
   display: inline-block;
 }
+
+.visible {
+
+}
+
+.invisible {
+    display: none;
+}

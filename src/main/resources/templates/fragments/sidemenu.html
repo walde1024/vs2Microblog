@@ -8,7 +8,7 @@
 
     <div class="userprofile-panel panel panel-default">
         <div class="panel-body">
-            <a th:text="*{firstname} + ' ' + *{lastname}"></a>
+            <a th:text="*{firstname} + ' ' + *{lastname}" th:href="@{/me}"></a>
         </div>
     </div>
 

@@ -23,25 +23,31 @@
 
             <div class="col-md-8">
 
-                <div class="panel panel-default" th:object="${userProfile}">
+                <div class="panel panel-default" >
                     <div class="panel-body">
 
                         <div class="row">
                             <div class="col-md-6">
-                                <h2 class="user-name" th:text="*{firstname} + ' ' + *{lastname}"></h2>
+                                <h2 class="user-name" th:text="${userProfile.firstname} + ' ' + ${userProfile.lastname}"></h2>
                             </div>
 
                             <div class="col-md-6">
-                                <button class="btn btn-primary pull-right btn-follow">Folgen</button>
+                                <button id="followButton"
+                                        class="btn btn-primary pull-right btn-follow"
+                                        th:attr="data-email=${userProfile.email}, data-followButtonState=*{followButtonState}"
+                                        th:classappend="${followButtonState} == 'deactivated' ? invisible : visible"
+                                        th:text="${followButtonState} == 'follow' ? 'Folgen' : 'Nicht mehr folgen'">
+
+                                </button>
                             </div>
                         </div>
 
                         <div class="row">
                             <div class="col-md-6 center-text-wrapper">
-                                <a class="center-text">Folge ich: <span th:text="*{iFollowCount}"></span></a>
+                                <a class="center-text">Folge ich: <span th:text="${userProfile.iFollowCount}"></span></a>
                             </div>
                             <div class="col-md-6 center-text-wrapper">
-                                <a class="center-text">Folgen mir: <span th:text="*{followMeCount}"></span></a>
+                                <a class="center-text">Folgen mir: <span id="followMeCount" th:text="${userProfile.followMeCount}"></span></a>
                             </div>
                         </div>
 
@@ -88,5 +94,6 @@
 
     <script th:src="@{/webjars/jquery/2.1.4/jquery.min.js}"></script>
     <script th:src="@{/webjars/bootstrap/3.3.6/js/bootstrap.min.js}"></script>
+    <script th:src="@{/js/userprofile.js}"></script>
 </body>
 </html>

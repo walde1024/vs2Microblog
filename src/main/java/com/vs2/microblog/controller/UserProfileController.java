@@ -1,5 +1,7 @@
 package com.vs2.microblog.controller;
 
+import com.google.gson.Gson;
+import com.vs2.microblog.controller.utils.FollowButtonState;
 import com.vs2.microblog.controller.utils.UserUtils;
 import com.vs2.microblog.dao.api.UserDao;
 import com.vs2.microblog.entity.User;
@@ -11,6 +13,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpSession;
 
@@ -35,8 +38,9 @@ public class UserProfileController {
         model.addAttribute("user", user);
         model.addAttribute("userProfile", userDao.getUserByEmail(userEmail));
 
-        if (userEmail == null) {
+        if (userEmail == null || userEmail.equals(user.getEmail())) {
             model.addAttribute("userProfile", userProfileViewProvider.getUserProfileView(user.getEmail()));
+            model.addAttribute("followButtonState", FollowButtonState.DEACTIVATED.toString());
         }
         else {
             UserProfileView userProfileView = userProfileViewProvider.getUserProfileView(userEmail);
@@ -45,17 +49,47 @@ public class UserProfileController {
             }
             else {
                 model.addAttribute("userProfile", userProfileView);
+                if (userDao.doIFollowUser(user.getEmail(), userProfileView.getEmail())) {
+                    model.addAttribute("followButtonState", FollowButtonState.UNFOLLOW.toString());
+                }
+                else {
+                    model.addAttribute("followButtonState", FollowButtonState.FOLLOW.toString());
+                }
             }
         }
 
         return "userprofile";
     }
 
+    /**
+     * Lets current user follow or unfollow a user.
+     * @param userEmail
+     * @param follow True to follow and false to unfollow.
+     * @param session
+     * @return
+     */
+    @RequestMapping(path = "/userprofile/follow", method = RequestMethod.POST, produces = { "application/json; charset=utf-8" })
+    public @ResponseBody String followOrUnfollowUser(@RequestParam(name = "userEmail") String userEmail,
+                       @RequestParam(name = "follow") boolean follow,
+                       HttpSession session) {
+
+        User user = userUtils.getUserFromSession(session);
+
+        if (follow) {
+            userDao.addIFollowUser(user.getEmail(), userEmail);
+            return new Gson().toJson("{'result': 'OK'}");
+        }
+        else {
+            //TODO: Add unfollow function
+            return new Gson().toJson("{'result': 'OK'}");
+        }
+    }
+
     @RequestMapping(path = "/me", method = RequestMethod.GET)
     public String me(HttpSession session, Model model) {
-        model.addAttribute("user", userUtils.getUserFromSession(session));
+        User user = userUtils.getUserFromSession(session);
 
-        return "userprofile";
+        return userprofile(user.getEmail(), session, model);
     }
 
     @RequestMapping(path = "/userprofile/ifollow", method = RequestMethod.GET)

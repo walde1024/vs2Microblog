@@ -64,4 +64,9 @@ public class User implements Serializable {
         Gson gson = new Gson();
         return gson.fromJson(json, User.class);
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        return ((User) obj).getEmail().equals(this.getEmail());
+    }
 }
