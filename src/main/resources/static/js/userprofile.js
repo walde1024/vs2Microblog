@@ -2,7 +2,7 @@ $('#followButton').click(function() {
 
     var that = this;
     var userEmail = $('#followButton').data("email");
-    var followAction = $('#followButton').data("followButtonState");
+    var followAction = $('#followButton').data("followbuttonstate");
 
     var follow = (followAction === "follow") ? true : false;
 
@@ -17,15 +17,28 @@ $('#followButton').click(function() {
 });
 
 function onFollowOrUnfollowSuccess(result) {
+    updateButtonText();
+    updateFollowMeCount();
+    toggleFollowAction();
+}
+
+function updateButtonText() {
     var followAction = $('#followButton').data("followbuttonstate");
     var followText = (followAction === "follow") ? "Nicht mehr folgen" : "Folgen";
+    $('#followButton').text(followText);
+}
 
+function updateFollowMeCount() {
+    var followAction = $('#followButton').data("followbuttonstate");
     var followMeCount = parseInt($('#followMeCount').text());
     var followMeAdd = (followAction === "follow") ? 1 : -1;
 
+    $('#followMeCount').text(followMeCount + followMeAdd);
+}
+
+function toggleFollowAction() {
+    var followAction = $('#followButton').data("followbuttonstate");
     var oppositeAction = (followAction === "follow") ? "unfollow" : "follow";
 
-    $('#followButton').text(followText);
     $('#followButton').data("followbuttonstate", oppositeAction);
-    $('#followMeCount').text(followMeCount + followMeAdd);
 }

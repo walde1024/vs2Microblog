@@ -116,6 +116,12 @@ public class UserDaoRedis implements UserDao {
     }
 
     @Override
+    public void removeIFollowUser(String myEmail, String unfollowUserEmail) {
+        template.opsForList().remove(I_FOLLOW_PREFIX + myEmail, 0, unfollowUserEmail);
+        template.opsForList().remove(FOLLOW_ME_PREFIX + unfollowUserEmail, 0, myEmail);
+    }
+
+    @Override
     public void deleteUser(String email) {
         template.delete(USER_PREFIX + email);
     }

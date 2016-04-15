@@ -80,7 +80,7 @@ public class UserProfileController {
             return new Gson().toJson("{'result': 'OK'}");
         }
         else {
-            //TODO: Add unfollow function
+            userDao.removeIFollowUser(user.getEmail(), userEmail);
             return new Gson().toJson("{'result': 'OK'}");
         }
     }

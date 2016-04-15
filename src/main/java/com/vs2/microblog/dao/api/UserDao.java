@@ -25,5 +25,7 @@ public interface UserDao {
 
     void addIFollowUser(String myEmail, String iFollowUserEmail);
 
+    void removeIFollowUser(String myEmail, String unfollowUserEmail);
+
     void deleteUser(String email);
 }
