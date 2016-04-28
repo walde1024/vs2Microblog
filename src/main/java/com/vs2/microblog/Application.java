@@ -1,6 +1,7 @@
 package com.vs2.microblog;
 
 import com.vs2.microblog.controller.session.SessionManager;
+import com.vs2.microblog.controller.utils.FollowUtils;
 import com.vs2.microblog.controller.utils.UserUtils;
 import com.vs2.microblog.dao.MessageDaoRedis;
 import com.vs2.microblog.dao.UserDaoRedis;
@@ -114,5 +115,10 @@ public class Application {
     @Bean
     public UserUtils userUtils() {
         return new UserUtils();
+    }
+
+    @Bean
+    public FollowUtils followUtils() {
+        return new FollowUtils();
     }
 }

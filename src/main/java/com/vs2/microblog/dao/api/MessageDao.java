@@ -13,4 +13,8 @@ public interface MessageDao {
 
     List<Message> getGlobalTimelineMessages(int fromMessage, int toMessage);
     List<Message> getPersonalTimelineMessages(int fromMessage, int toMessage, String email);
+
+    void addMessagesFromUserToMyPersonalTimeline(User me, String otherUserEmail);
+
+    void removeMessagesOfUserFromMyPersonalTimeline(User me, String otherUserEmail);
 }

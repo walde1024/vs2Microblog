@@ -2,6 +2,7 @@ package com.vs2.microblog.controller;
 
 import com.google.gson.Gson;
 import com.vs2.microblog.controller.utils.FollowButtonState;
+import com.vs2.microblog.controller.utils.FollowUtils;
 import com.vs2.microblog.controller.utils.UserUtils;
 import com.vs2.microblog.dao.api.UserDao;
 import com.vs2.microblog.entity.User;
@@ -28,6 +29,9 @@ public class UserProfileController {
 
     @Autowired
     private UserDao userDao;
+
+    @Autowired
+    private FollowUtils followUtils;
 
     @Autowired
     private UserProfileViewProvider userProfileViewProvider;
@@ -76,11 +80,11 @@ public class UserProfileController {
         User user = userUtils.getUserFromSession(session);
 
         if (follow) {
-            userDao.addIFollowUser(user.getEmail(), userEmail);
+            followUtils.addIFollowUser(user, userEmail);
             return new Gson().toJson("{'result': 'OK'}");
         }
         else {
-            userDao.removeIFollowUser(user.getEmail(), userEmail);
+            followUtils.removeIFollowUser(user, userEmail);
             return new Gson().toJson("{'result': 'OK'}");
         }
     }

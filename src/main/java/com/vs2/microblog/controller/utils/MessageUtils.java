@@ -1,6 +1,8 @@
 package com.vs2.microblog.controller.utils;
 
+import com.vs2.microblog.dao.api.MessageDao;
 import com.vs2.microblog.entity.User;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 /**
@@ -8,8 +10,6 @@ import org.springframework.stereotype.Component;
  */
 @Component
 public class MessageUtils {
-
-
 
     /**
      * Creates a new message.

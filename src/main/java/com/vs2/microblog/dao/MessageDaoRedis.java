@@ -5,8 +5,10 @@ import com.vs2.microblog.dao.api.MessageDao;
 import com.vs2.microblog.dao.api.UserDao;
 import com.vs2.microblog.entity.Message;
 import com.vs2.microblog.entity.User;
+import org.codehaus.groovy.runtime.ArrayUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.ZSetOperations;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -127,5 +129,20 @@ public class MessageDaoRedis implements MessageDao {
 
     private long generateMessageKey() {
         return template.opsForValue().increment(MESSAGE_SEQUENCE, 1);
+    }
+
+    @Override
+    public void addMessagesFromUserToMyPersonalTimeline(User me, String otherUserEmail) {
+        Set<ZSetOperations.TypedTuple<String>> messages = template.opsForZSet().rangeWithScores(USERS_MESSAGES_SET_PREFIX + otherUserEmail, 0, -1);
+
+        for (ZSetOperations.TypedTuple<String> message: messages) {
+            template.opsForZSet().add(PERSONAL_TIMELINE_PREFIX + me.getEmail(), message.getValue(), message.getScore());
+        }
+    }
+
+    @Override
+    public void removeMessagesOfUserFromMyPersonalTimeline(User me, String otherUserEmail) {
+        Set<String> messages = template.opsForZSet().range(USERS_MESSAGES_SET_PREFIX + otherUserEmail, 0, -1);
+        template.opsForZSet().remove(PERSONAL_TIMELINE_PREFIX + me.getEmail(), messages.toArray());
     }
 }
