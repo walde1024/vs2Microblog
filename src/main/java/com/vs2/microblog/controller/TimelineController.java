@@ -62,16 +62,18 @@ public class TimelineController {
 
 	@RequestMapping(path = "/messages", method = RequestMethod.GET, produces = { "application/json; charset=utf-8" })
 	public @ResponseBody String getMessages(@RequestParam(name = "timeline") String timeline,
-							  @RequestParam(name = "fromMessage") String fromMessage,
-							  @RequestParam(name = "toMessage") String toMessage,
-							  HttpSession session) {
+						  	@RequestParam(name = "fromMessage") String fromMessage,
+						  	@RequestParam(name = "toMessage") String toMessage,
+							@RequestParam(name = "userEmail", required = false) String userEmail,
+						  	HttpSession session) {
 
 		if (timeline.equals(GLOBAL_TIMELINE)) {
 			return timelineViewProvider.getGlobalTimelineViews(Integer.parseInt(fromMessage), Integer.parseInt(toMessage));
 		}
 		else {
-			User me = userUtils.getUserFromSession(session);
-			return timelineViewProvider.getPersonalTimelineViews(Integer.parseInt(fromMessage), Integer.parseInt(toMessage), me.getEmail());
+			String email = (userEmail == null) ? userUtils.getUserFromSession(session).getEmail() : userEmail;
+
+			return timelineViewProvider.getPersonalTimelineViews(Integer.parseInt(fromMessage), Integer.parseInt(toMessage), email);
 		}
 	}
 }
