@@ -29,11 +29,8 @@
                         </div>
 
                         <div class="user-search-results">
-                            <p class="user-name-link">
-                                Waldemar Schlegel
-                            </p>
-                            <p class="user-name-link">
-                                Wladimir Putin
+                            <p class="user-name-link" th:each="profile : ${userProfiles}">
+                                <a th:text="${profile.firstname}"></a>
                             </p>
                         </div>
 

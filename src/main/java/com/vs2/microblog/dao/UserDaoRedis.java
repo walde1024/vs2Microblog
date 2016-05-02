@@ -3,10 +3,13 @@ package com.vs2.microblog.dao;
 import com.vs2.microblog.dao.api.UserDao;
 import com.vs2.microblog.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.Cursor;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.ScanOptions;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 /**
@@ -18,6 +21,11 @@ public class UserDaoRedis implements UserDao {
     private static final String FOLLOW_ME_PREFIX = "followme:";
     private static final String I_FOLLOW_PREFIX = "ifollow:";
     private static final String I_FOLLOW_INDEX_PREFIX = "ifollowindex:";
+    private static final String USER_HMAP_PREFIX = "usermap:";
+
+    public static final String USER_SEARCH_SET_KEY = "usersearchkeys";
+    public static final String USER_SEARCH_NAME_PREFIX = "usersearchname:";
+
 
     @Autowired
     private RedisTemplate<String, String> template;
@@ -39,9 +47,12 @@ public class UserDaoRedis implements UserDao {
                 password
         );
 
+        //Store user object as json
         String jsonUser = user.toJson();
-
         template.opsForValue().set(USER_PREFIX + user.getEmail(), jsonUser);
+
+        template.opsForValue().set(USER_SEARCH_NAME_PREFIX + firstname.toLowerCase().trim() + lastname.toLowerCase().trim(), email);
+        template.opsForSet().add(USER_SEARCH_SET_KEY, USER_SEARCH_NAME_PREFIX + firstname.toLowerCase() + lastname.toLowerCase());
 
         return user;
     }
@@ -125,4 +136,55 @@ public class UserDaoRedis implements UserDao {
     public void deleteUser(String email) {
         template.delete(USER_PREFIX + email);
     }
+
+    @Override
+    public List<User> searchUsers(String searchString) {
+        ScanOptions.ScanOptionsBuilder builder = new ScanOptions.ScanOptionsBuilder();
+        List<String> userKeys = new ArrayList<>();
+
+        builder.match(USER_SEARCH_NAME_PREFIX + "*" + searchString.toLowerCase().trim() + "*");
+        Cursor<String> cursor = template.opsForSet().scan(USER_SEARCH_SET_KEY, builder.build());
+
+        cursor.forEachRemaining(userSearchKey -> {
+            userKeys.add(template.opsForValue().get(userSearchKey));
+        });
+
+        return getUsersByEmails(userKeys);
+    }
+
+    private List<User> getUsersByEmails(List<String> emails) {
+        List<User> users = emails.stream()
+                .filter(email -> {
+                    //TODO: Filter own email out
+                    return true;
+                })
+                .map(email -> {
+                    return this.getUserByEmail(email);
+                })
+                .collect(Collectors.toList());
+
+        return users;
+    }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

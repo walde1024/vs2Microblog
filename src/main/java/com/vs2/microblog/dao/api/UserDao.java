@@ -28,4 +28,6 @@ public interface UserDao {
     void removeIFollowUser(String myEmail, String unfollowUserEmail);
 
     void deleteUser(String email);
+
+    List<User> searchUsers(String searchString);
 }
