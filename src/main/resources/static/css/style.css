@@ -9,6 +9,21 @@ body {
     color: #3b5998;
 }
 
+.search-user-name-link {
+    font-size: 2rem;
+    font-weight: bold;
+    color: #3b5998;
+    margin-bottom: 10px;
+}
+
+.search-user-properties {
+    margin: 0;
+}
+
+.message-panel {
+    margin-bottom: 5px;
+}
+
 .center-text-wrapper {
   text-align: center;
 }

@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.Cursor;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ScanOptions;
+import org.springframework.data.redis.core.ZSetOperations;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -52,7 +53,7 @@ public class UserDaoRedis implements UserDao {
         template.opsForValue().set(USER_PREFIX + user.getEmail(), jsonUser);
 
         template.opsForValue().set(USER_SEARCH_NAME_PREFIX + firstname.toLowerCase().trim() + lastname.toLowerCase().trim(), email);
-        template.opsForSet().add(USER_SEARCH_SET_KEY, USER_SEARCH_NAME_PREFIX + firstname.toLowerCase() + lastname.toLowerCase());
+        template.opsForZSet().add(USER_SEARCH_SET_KEY, USER_SEARCH_NAME_PREFIX + firstname.toLowerCase() + lastname.toLowerCase(), 0);
 
         return user;
     }
@@ -142,11 +143,11 @@ public class UserDaoRedis implements UserDao {
         ScanOptions.ScanOptionsBuilder builder = new ScanOptions.ScanOptionsBuilder();
         List<String> userKeys = new ArrayList<>();
 
-        builder.match(USER_SEARCH_NAME_PREFIX + "*" + searchString.toLowerCase().trim() + "*");
-        Cursor<String> cursor = template.opsForSet().scan(USER_SEARCH_SET_KEY, builder.build());
+        builder.match(USER_SEARCH_NAME_PREFIX + "*" + searchString.toLowerCase().trim().replaceAll("\\s+","") + "*");
+        Cursor<ZSetOperations.TypedTuple<String>> cursor = template.opsForZSet().scan(USER_SEARCH_SET_KEY, builder.build());
 
         cursor.forEachRemaining(userSearchKey -> {
-            userKeys.add(template.opsForValue().get(userSearchKey));
+            userKeys.add(template.opsForValue().get(userSearchKey.getValue()));
         });
 
         return getUsersByEmails(userKeys);
