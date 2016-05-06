@@ -44,10 +44,10 @@
 
                         <div class="row">
                             <div class="col-md-6 center-text-wrapper">
-                                <a class="center-text">Folge ich: <span th:text="${userProfile.iFollowCount}"></span></a>
+                                <a class="center-text" th:href="'/userprofile/ifollow?userEmail=' + ${userProfile.email}">Folge ich: <span th:text="${userProfile.iFollowCount}"></span></a>
                             </div>
                             <div class="col-md-6 center-text-wrapper">
-                                <a class="center-text">Folgen mir: <span id="followMeCount" th:text="${userProfile.followMeCount}"></span></a>
+                                <a class="center-text" th:href="'/userprofile/followme?userEmail=' + ${userProfile.email}">Folgen mir: <span id="followMeCount" th:text="${userProfile.followMeCount}"></span></a>
                             </div>
                         </div>
 

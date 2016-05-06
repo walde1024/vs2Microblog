@@ -39,3 +39,7 @@ body {
 .invisible {
     display: none;
 }
+
+.panel-less-bottom-margin {
+    margin-bottom: 5px;
+}

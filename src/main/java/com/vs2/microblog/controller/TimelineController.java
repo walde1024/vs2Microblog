@@ -49,7 +49,6 @@ public class TimelineController {
 	public String createMessage(@RequestParam(name = "timeline", defaultValue = GLOBAL_TIMELINE) String timeline,
 								@ModelAttribute PostForm postForm, HttpSession session, Model model) {
 
-		//TODO: clear textarea after submit is pressed
 		User user = userUtils.getUserFromSession(session);
 		model.addAttribute(User.MODEL_KEY, user);
 		model.addAttribute(TIMELINE_KEY, timeline);

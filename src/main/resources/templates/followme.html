@@ -26,41 +26,27 @@
                 <div class="panel panel-default">
                     <div class="panel-body">
 
-                        <h2 class="user-name">Waldemar Schlegel</h2>
-
-                        <div class="row">
-                            <div class="col-md-6 center-text-wrapper">
-                                <a class="center-text">Folge ich: 12</a>
-                            </div>
-                            <div class="col-md-6 center-text-wrapper">
-                                <a class="center-text">Folgen mir: 14</a>
-                            </div>
-                        </div>
+                        <h2 class="user-name" th:text="${displayUser.firstname} + ' ' + ${displayUser.lastname} + ' folgen'"></h2>
 
                     </div>
                 </div>
 
-
-                <div class="panel panel-default">
+                <div class="panel-less-bottom-margin panel panel-default" th:each="user : ${usersFollowMe}">
                     <div class="panel-body">
-
-                        <div>
-                            <h3>Folgen mir</h3>
-                        </div>
-
                         <div class="user-search-results">
-                            <p class="user-name-link">
-                                Sergej Friedrich
-                            </p>
-                            <p class="user-name-link">
-                                Wladimir Putin
-                            </p>
+                            <a class="user-name-link" th:text="${user.firstname} + ' ' + ${user.lastname}" th:href="'/userprofile?userEmail=' + ${user.email}"></a>
+                            <div>
+                                <p class="search-user-properties">Folge ich: <span th:text="${user.iFollowCount}"></span></p>
+                            </div>
+                            <div>
+                                <p class="search-user-properties">Folgen mir: <span id="followMeCount" th:text="${user.followMeCount}"></span></p>
+                            </div>
                         </div>
-
                     </div>
                 </div>
 
             </div>
+
         </div>
     </div>
 

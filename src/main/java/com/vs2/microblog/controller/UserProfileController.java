@@ -17,6 +17,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpSession;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Created by Walde on 19.03.16.
@@ -97,15 +99,35 @@ public class UserProfileController {
     }
 
     @RequestMapping(path = "/userprofile/ifollow", method = RequestMethod.GET)
-    public String iFollow(HttpSession session, Model model) {
+    public String iFollow(HttpSession session, Model model, @RequestParam(name = "userEmail") String userEmail) {
         model.addAttribute("user", userUtils.getUserFromSession(session));
+        model.addAttribute("displayUser", userDao.getUserByEmail(userEmail));
+
+        List<User> usersIFollow = userDao.getUsersIFollow(userEmail);
+
+        List<UserProfileView> userProfileViews = usersIFollow.stream().map(user -> {
+            return userProfileViewProvider.getUserProfileView(user.getEmail());
+        })
+        .collect(Collectors.toList());
+
+        model.addAttribute("usersIFollow", userProfileViews);
 
         return "ifollow";
     }
 
     @RequestMapping(path = "/userprofile/followme", method = RequestMethod.GET)
-    public String followMe(HttpSession session, Model model) {
+    public String followMe(HttpSession session, Model model, @RequestParam(name = "userEmail") String userEmail) {
         model.addAttribute("user", userUtils.getUserFromSession(session));
+        model.addAttribute("displayUser", userDao.getUserByEmail(userEmail));
+
+        List<User> usersFollowMe = userDao.getUsersFollowingMe(userEmail);
+
+        List<UserProfileView> userProfileViews = usersFollowMe.stream().map(user -> {
+            return userProfileViewProvider.getUserProfileView(user.getEmail());
+        })
+                .collect(Collectors.toList());
+
+        model.addAttribute("usersFollowMe", userProfileViews);
 
         return "followme";
     }
