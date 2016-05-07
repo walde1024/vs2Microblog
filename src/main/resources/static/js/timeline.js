@@ -1,18 +1,32 @@
 var TimelineController = {
-    readFirstMessages: function() {
+
+    newestMessageIndex: 0,
+    messagesToLoadCount: 15,
+    noNewMessages: false,
+
+    readMessages: function() {
+        if (this.noNewMessages) {
+            return;
+        }
+
         var that = this;
         var timeline = this.getUrlParameter("timeline");
         timeline = (timeline) ? timeline : "global";
 
         $.ajax({
           url: "/messages",
-          data: {"timeline": timeline, "fromMessage": "0", "toMessage": "14"},
+          data: {"timeline": timeline, "fromMessage": this.newestMessageIndex, "toMessage": this.messagesToLoadCount + this.newestMessageIndex},
           success: jQuery.proxy(function(data) {that.showMessagesOnPage(data)}, that),
           error: that.onReadMessagesError,
         });
     },
 
     showMessagesOnPage: function(data) {
+        this.newestMessageIndex += data.length;
+        if (data.length < this.messagesToLoadCount) {
+            this.noNewMessages = true;
+        }
+
         for (var i = 0; i < data.length; i++) {
 
             var messageHtml =
@@ -69,4 +83,10 @@ var TimelineController = {
     },
 }
 
-TimelineController.readFirstMessages();
+$(window).scroll(function() {
+   if($(window).scrollTop() + $(window).height() == $(document).height()) {
+       TimelineController.readMessages();
+   }
+});
+
+TimelineController.readMessages();

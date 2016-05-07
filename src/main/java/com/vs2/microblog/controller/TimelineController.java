@@ -56,7 +56,7 @@ public class TimelineController {
 
 		messageDao.storeMessage(user.getEmail(), postForm.getBody());
 
-		return "timeline";
+		return "redirect:/?timeline=" + timeline;
 	}
 
 	@RequestMapping(path = "/messages", method = RequestMethod.GET, produces = { "application/json; charset=utf-8" })
