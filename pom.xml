@@ -21,6 +21,16 @@
         </dependency>
 
         <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-messaging</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-websocket</artifactId>
+        </dependency>
+
+        <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-devtools</artifactId>
             <optional>true</optional>
@@ -59,6 +69,18 @@
             <groupId>org.webjars</groupId>
             <artifactId>jquery</artifactId>
             <version>2.1.4</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.webjars</groupId>
+            <artifactId>sockjs-client</artifactId>
+            <version>1.0.2</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.webjars</groupId>
+            <artifactId>stomp-js</artifactId>
+            <version>ca2e094679</version>
         </dependency>
 
         <dependency>

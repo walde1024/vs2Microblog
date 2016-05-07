@@ -9,6 +9,7 @@ import com.vs2.microblog.dao.api.UserDao;
 import com.vs2.microblog.entity.User;
 import com.vs2.microblog.view.provider.TimelineViewProvider;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -36,6 +37,9 @@ public class TimelineController {
 	@Autowired
 	TimelineViewProvider timelineViewProvider;
 
+	@Autowired
+	private SimpMessagingTemplate messagingTemplate;
+
 	@RequestMapping(path = "/", method = RequestMethod.GET)
 	public String show(@RequestParam(name = "timeline", defaultValue = GLOBAL_TIMELINE) String timeline,HttpSession session, Model model) {
 		model.addAttribute("user", userUtils.getUserFromSession(session));
@@ -55,6 +59,8 @@ public class TimelineController {
 		model.addAttribute("postForm", new PostForm());
 
 		messageDao.storeMessage(user.getEmail(), postForm.getBody());
+
+		messagingTemplate.convertAndSend("/message/update", "{'update':'New Messages available'}");
 
 		return "redirect:/?timeline=" + timeline;
 	}
