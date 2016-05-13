@@ -27,13 +27,13 @@
                     <div class="panel-body">
 
                         <div class="row">
-                            <div class="col-md-6">
-                                <h2 class="user-name" th:text="${userProfile.firstname} + ' ' + ${userProfile.lastname}"></h2>
+                            <div class="col-md-12">
+                                <h2 class="user-name" align="center" th:text="${userProfile.firstname} + ' ' + ${userProfile.lastname}"></h2>
                             </div>
 
-                            <div class="col-md-6">
+                            <div class="col-md-12">
                                 <button id="followButton"
-                                        class="btn btn-primary pull-right btn-follow"
+                                        class="btn btn-primary center-block btn-follow"
                                         th:attr="data-email=${userProfile.email}, data-followButtonState=*{followButtonState}"
                                         th:classappend="${followButtonState} == 'deactivated' ? invisible : visible"
                                         th:text="${followButtonState} == 'follow' ? 'Folgen' : 'Nicht mehr folgen'">

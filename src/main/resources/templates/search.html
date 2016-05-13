@@ -33,9 +33,9 @@
                 <div class="panel panel-default message-panel" th:each="profile : ${userProfiles}">
                     <div class="panel-body">
                         <div class="user-search-results">
-                            <a class="search-user-name-link"
-                                 th:text="${profile.firstname} + ' ' + ${profile.lastname}" th:href="'/userprofile?userEmail=' + ${profile.email}">
-                            </a>
+                            <p class="search-name">
+                                 <a th:text="${profile.firstname} + ' ' + ${profile.lastname}" th:href="'/userprofile?userEmail=' + ${profile.email}"></a>
+                            </p>
 
                             <div>
                                 <p class="search-user-properties">Folge ich: <span th:text="${profile.iFollowCount}"></span></p>
