@@ -25,6 +25,6 @@ public class LogoutController {
 	public String show(HttpSession session, Model model) {
 		sessionManager.logout(session);
 
-		return "login";
+		return "redirect:/login";
 	}
 }
