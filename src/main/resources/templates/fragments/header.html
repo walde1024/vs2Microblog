@@ -16,9 +16,17 @@
                 <a class="navbar-brand" th:href="@{/}">
                     VS2 Microblog
                 </a>
+
             </div>
 
+
+            <button id="newMessagesButton" class="btn btn-primary navbar-btn navbar-left" type="button" href="/?timeline=global">
+                Neue Nachrichten <span id="newMessagesCounter" class="badge">0</span>
+            </button>
+
+
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+
                 <ul class="nav navbar-nav navbar-right">
                     <li class="dropdown" th:object="${user}">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" th:text="*{firstname} + ' ' + *{lastname}"><span class="caret"></span></a>
@@ -38,9 +46,7 @@
                 </form>
             </div>
 
-            <button id="newMessagesButton" class="btn btn-primary navbar-btn navbar-right" type="button" href="/?timeline=global">
-                Neue Nachrichten <span id="newMessagesCounter" class="badge">0</span>
-            </button>
+
 
         </div>
     </nav>
