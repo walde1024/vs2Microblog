@@ -37,3 +37,14 @@
   border-top-left-radius: 0;
   border-top-right-radius: 0;
 }
+
+.not-registered p {
+  margin: 0;
+}
+
+.not-registered {
+  text-align:center;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
