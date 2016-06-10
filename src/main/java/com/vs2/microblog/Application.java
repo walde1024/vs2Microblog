@@ -8,17 +8,23 @@ import com.vs2.microblog.dao.UserDaoRedis;
 import com.vs2.microblog.dao.api.MessageDao;
 import com.vs2.microblog.dao.api.UserDao;
 import com.vs2.microblog.entity.User;
+import com.vs2.microblog.redis.RedisTimelineUpdateMessageReceiver;
 import com.vs2.microblog.security.SecurityExcludeConfiguration;
-import com.vs2.microblog.view.TimelineView;
 import com.vs2.microblog.view.provider.TimelineViewProvider;
 import com.vs2.microblog.view.provider.UserProfileViewProvider;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.embedded.FilterRegistrationBean;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.core.annotation.Order;
+import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.data.redis.listener.PatternTopic;
+import org.springframework.data.redis.listener.RedisMessageListenerContainer;
+import org.springframework.data.redis.listener.adapter.MessageListenerAdapter;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 import org.springframework.session.data.redis.config.annotation.web.http.EnableRedisHttpSession;
 import org.springframework.session.data.redis.config.annotation.web.http.RedisHttpSessionConfiguration;
@@ -37,7 +43,10 @@ import java.util.Arrays;
 public class Application {
 
     public static void main(String args[]) {
-        SpringApplication.run(Application.class, args);
+        ApplicationContext ctx = SpringApplication.run(Application.class, args);
+
+        StringRedisTemplate template = ctx.getBean(StringRedisTemplate.class);
+        template.convertAndSend("timeline", "Hello from Redis!");
     }
 
     @Bean(name="jedisConnFactory")
@@ -80,6 +89,30 @@ public class Application {
         filterRegistrationBean.setUrlPatterns(Arrays.asList("/*"));
 
         return filterRegistrationBean;
+    }
+
+    @Bean
+    RedisMessageListenerContainer container(RedisConnectionFactory connectionFactory, MessageListenerAdapter listenerAdapter) {
+        RedisMessageListenerContainer container = new RedisMessageListenerContainer();
+        container.setConnectionFactory(connectionFactory);
+        container.addMessageListener(listenerAdapter, new PatternTopic("timeline"));
+
+        return container;
+    }
+
+    @Bean
+    MessageListenerAdapter listenerAdapter(RedisTimelineUpdateMessageReceiver receiver) {
+        return new MessageListenerAdapter(receiver, "receiveUpdateMessage");
+    }
+
+    @Bean
+    RedisTimelineUpdateMessageReceiver receiver() {
+        return new RedisTimelineUpdateMessageReceiver();
+    }
+
+    @Bean
+    StringRedisTemplate template(RedisConnectionFactory connectionFactory) {
+        return new StringRedisTemplate(connectionFactory);
     }
 
     @Bean

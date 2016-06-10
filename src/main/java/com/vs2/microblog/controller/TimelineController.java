@@ -9,6 +9,7 @@ import com.vs2.microblog.dao.api.UserDao;
 import com.vs2.microblog.entity.User;
 import com.vs2.microblog.view.provider.TimelineViewProvider;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -38,7 +39,7 @@ public class TimelineController {
 	TimelineViewProvider timelineViewProvider;
 
 	@Autowired
-	private SimpMessagingTemplate messagingTemplate;
+	StringRedisTemplate redisStringtemplate;
 
 	@RequestMapping(path = "/", method = RequestMethod.GET)
 	public String show(@RequestParam(name = "timeline", defaultValue = GLOBAL_TIMELINE) String timeline,HttpSession session, Model model) {
@@ -60,7 +61,7 @@ public class TimelineController {
 
 		messageDao.storeMessage(user.getEmail(), postForm.getBody());
 
-		messagingTemplate.convertAndSend("/message/update", "{'update':'New Messages available'}");
+		redisStringtemplate.convertAndSend("timeline", "Hello from Redis!");
 
 		return "redirect:/?timeline=" + timeline;
 	}
