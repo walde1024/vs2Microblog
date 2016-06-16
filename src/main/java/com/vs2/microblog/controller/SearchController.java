@@ -39,7 +39,10 @@ public class SearchController {
         List<User> users = userDao.searchUsers(searchString);
 
         List<UserProfileView> userProfileViews = users.stream().filter(user -> {
-            return (user.equals(me)) ? false : true;
+            if (user == null)
+                return false;
+            else
+                return (user.equals(me)) ? false : true;
         })
         .map(user -> {
             return userProfileViewProvider.getUserProfileView(user.getEmail());
