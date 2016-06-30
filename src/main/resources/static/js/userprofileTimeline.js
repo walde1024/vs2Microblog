@@ -1,17 +1,27 @@
 var TimelineController = {
-    readFirstMessages: function() {
+
+    newestMessageIndex: 0,
+    messagesToLoadCount: 15,
+    noNewMessages: false,
+
+    readMessages: function() {
         var that = this;
         var userEmail = $('#followButton').data("email");
 
         $.ajax({
           url: "/messages",
-          data: {"timeline": "personal", "fromMessage": "0", "toMessage": "14", "userEmail": userEmail},
+          data: {"timeline": "personal", "fromMessage": this.newestMessageIndex, "toMessage": this.messagesToLoadCount + this.newestMessageIndex, "userEmail": userEmail},
           success: jQuery.proxy(function(data) {that.showMessagesOnPage(data)}, that),
           error: that.onReadMessagesError,
         });
     },
 
     showMessagesOnPage: function(data) {
+        this.newestMessageIndex += data.length;
+        if (data.length < this.messagesToLoadCount) {
+            this.noNewMessages = true;
+        }
+
         for (var i = 0; i < data.length; i++) {
 
             var messageHtml =
@@ -68,4 +78,10 @@ var TimelineController = {
     },
 }
 
-TimelineController.readFirstMessages();
+$(window).scroll(function() {
+   if($(window).scrollTop() + $(window).height() == $(document).height()) {
+       TimelineController.readMessages();
+   }
+});
+
+TimelineController.readMessages();
